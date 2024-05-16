@@ -3,22 +3,21 @@ import LabelsAtom from '@atoms/Labels'
 import { useRecoilValue } from 'recoil'
 import { Button } from '@mui/material'
 import { useRouter } from 'next/router'
+import urls from '@constants/urls'
 
-const LanguageButton = () => {
-	const { en, ar } = useRecoilValue(LabelsAtom).layout.header.language
+const VisitUs = () => {
+	const { visitUs } = useRecoilValue(LabelsAtom).layout.header
 	const router = useRouter()
-	const locale = router.locale ?? 'en'
 	return (
 		<StyledButton
 			color="primary"
 			variant="text"
 			size="large"
 			onClick={() => {
-				const updatedUrl = `/${locale === 'en' ? 'ar' : 'en'}${router.asPath}`
-				if (window) window.location.href = updatedUrl
+				router.push(urls.unifiSolutionsUrl)
 			}}
 		>
-			{locale === 'en' ? ar : en}
+			{visitUs}
 		</StyledButton>
 	)
 }
@@ -29,10 +28,7 @@ const StyledButton = styled(Button)`
 	border-radius: 12px;
 	color: ${({ theme }) => theme.colors.white} !important;
 	font-size: 12px;
-
-	&:hover {
-		background: ${({ theme }) => theme.colors.primary};
-	}
+	background: ${({ theme }) => theme.colors.primary} !important;
 `
 
-export default LanguageButton
+export default VisitUs
