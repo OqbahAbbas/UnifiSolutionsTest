@@ -24,3 +24,8 @@ export interface ViewModel {
 	title: string
 	val: string
 }
+
+export interface FilteredBikes {
+	data: { bikes: Bike[] }
+	total: number
+}

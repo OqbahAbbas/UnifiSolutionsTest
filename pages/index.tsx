@@ -4,6 +4,8 @@ import styled from '@emotion/styled'
 import MainLayout from '@components/Layouts/Main'
 import initialPropsWrapper from '@helpers/initialPropsWrapper'
 import { NextPageWithProps } from '@interfaces/NextPage'
+import BikesService from '@api/Models/Bikes/index'
+import { FilteredBikes } from '@api/Models/Bikes/types'
 
 const Page: NextPageWithProps = () => (
 	<>
@@ -34,9 +36,22 @@ export const Wrapper = styled.div`
 
 Page.getInitialProps = context =>
 	initialPropsWrapper(
-		async () => ({
-			bikes: [],
-		}),
+		async () => {
+			const BikesResponse = await BikesService.get()
+
+			if (BikesResponse && 'redirect' in BikesResponse) {
+				const { redirect } = BikesResponse
+				return {
+					redirect,
+				}
+			}
+
+			const { total, data } = BikesResponse as FilteredBikes
+
+			return {
+				bikes: { total, data },
+			}
+		},
 		Page,
 		context
 	)
