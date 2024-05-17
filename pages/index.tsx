@@ -5,12 +5,7 @@ import MainLayout from '@components/Layouts/Main'
 import initialPropsWrapper from '@helpers/initialPropsWrapper'
 import { NextPageWithProps } from '@interfaces/NextPage'
 import BikesService from '@api/Models/Bikes/index'
-import { flexGap } from '@admixltd/admix-component-library'
-import ColumnSelector from '@components/Pages/Bike/Table/ColumnSelector'
-import Table from '@components/Pages/Bike/Table/Table'
-import { useRouter } from 'next/router'
 import { getCookie } from 'cookies-next'
-import TableSkeleton from '@components/Skeletons/TableSkeleton'
 import {
 	BikeFilterLoadingAtom,
 	BikeFiltersAtom,
@@ -18,62 +13,52 @@ import {
 	BikesDataAtom,
 	ColumnSelectorCookieName,
 	ColumnVisibilityAtom,
-	LoadingAtom,
 	PageIndexAtom,
 	PageSizeAtom,
+	ViewBikesAtom,
 } from '@atoms/Bikes'
-import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 import queryParams from '@utils/basic/queryParameters'
+import ListView from '@components/Pages/Bike/List/ListView'
+import TableView from '@components/Pages/Bike/Table/TableView'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import LabelsAtom from '@atoms/Labels'
+import BikesView from '@components/Pages/Bike/BikesView'
+import { useEffect } from 'react'
+import { ViewModel } from '@api/Models/Bikes/types'
 import TableController from '@components/Pages/Bike/Table/TableController'
-import { useRecoilValue } from 'recoil'
-import BikeCard from '@components/Pages/Bike/List/BikeCard'
-import BikeCardSkeleton from '@components/Skeletons/BikeCardSkeleton'
+import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 
 const Page: NextPageWithProps = () => {
-	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
-	const loading = useRecoilValue(LoadingAtom)
+	const [view, setView] = useRecoilState(ViewBikesAtom)
+	const { view: viewLabels } = useRecoilValue(LabelsAtom).pages.bikes
 	const bikes = useRecoilValue(BikesDataAtom)
-	const router = useRouter()
-	const { locale } = router ?? {}
+
+	useEffect(() => {
+		const viewVal = viewLabels.options.find(option => option.val === view.val)
+		setView(viewVal as ViewModel)
+	}, [])
+
 	return (
 		<>
 			<Meta />
 			<Container>
-				<TableContainer locale={locale ?? 'en'}>
-					<TableController />
-					<TableActions>
-						<div />
-						<div>
-							<div />
-							<ColumnSelector />
-						</div>
-					</TableActions>
-					{(filterLoading || loading) && (
-						<TableSkeleton
-							{...{
-								rows: 10,
-								columns: 5,
-							}}
-						/>
-					)}
-					{!filterLoading && !loading && <Table />}
-					<TableFooter />
-				</TableContainer>
-				{bikes.length > 0 && !filterLoading && !loading && (
-					<div className="cardsContainer">
-						{bikes.map(bike => (
-							<BikeCard bike={bike} key={bike.id} />
-						))}
+				<div className="header">
+					<div className="results">
+						<h1>results</h1>
+						<span>{`(${bikes.length})`}</span>
 					</div>
+					<div className="actions">
+						<BikesView />
+					</div>
+				</div>
+				<TableController />
+				{view.val === 'table' && <TableView />}
+				{view.val === 'list' && (
+					<>
+						<ListView />
+						<TableFooter />
+					</>
 				)}
-				{filterLoading ||
-					(loading && (
-						<div className="cardsContainer">
-							{[1, 2, 3, 4].map(item => (
-								<BikeCardSkeleton key={item} />
-							))}
-						</div>
-					))}
 			</Container>
 		</>
 	)
@@ -91,55 +76,47 @@ const Container = styled(BaseContainer)`
 	${({ theme }) => theme.adaptive.md} {
 		padding: 32px 12px;
 	}
+
+	.header {
+		display: grid;
+		grid-auto-flow: column;
+		justify-content: space-between;
+		align-items: center;
+
+		${({ theme }) => theme.adaptive.md} {
+			grid-auto-flow: row;
+			gap: 24px;
+			justify-content: start;
+			padding: 0 24px;
+		}
+
+		.results {
+			display: grid;
+			grid-auto-flow: column;
+			justify-content: start;
+			align-items: center;
+			gap: 4px;
+			color: ${({ theme }) => theme.colors.primary};
+		}
+
+		.actions {
+			display: grid;
+			grid-auto-flow: column;
+			justify-content: start;
+			align-items: center;
+			gap: 12px;
+
+			${({ theme }) => theme.adaptive.md} {
+				grid-auto-flow: row;
+			}
+		}
+	}
 `
 
 export const Wrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-`
-
-const TableContainer = styled.div<{
-	locale: string
-}>`
-	border-radius: 8px;
-	padding: 0 24px;
-	background-color: ${({ theme }) => theme.colors.white};
-	margin: 8px 0 24px;
-	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	overflow-x: scroll;
-	overflow-y: hidden;
-	box-shadow: 10px 10px 10px #c6cddd;
-	box-shadow: inset 0px -1px 0px ${({ theme }) => theme.colors.gray200};
-	.MuiDataGrid-root {
-		width: 100%;
-		direction: ${({ locale }) => (locale === 'ar' ? 'rtl' : 'ltr')};
-	}
-	.MuiDataGrid-columnHeadersInner {
-		direction: ltr;
-	}
-	.MuiDataGrid-virtualScrollerContent {
-		direction: ltr;
-	}
-`
-
-const TableActions = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	height: 66px;
-	margin-right: -10px;
-	margin-left: -10px;
-	padding-left: 10px;
-
-	${flexGap(8)};
-
-	> div {
-		${flexGap(16)};
-	}
 `
 
 Page.getInitialProps = context =>

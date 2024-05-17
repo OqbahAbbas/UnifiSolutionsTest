@@ -48,4 +48,17 @@ export default {
 			clear: 'Clear',
 		},
 	},
+	view: {
+		label: 'View',
+		options: [
+			{
+				title: 'List',
+				val: 'list',
+			},
+			{
+				title: 'Table',
+				val: 'table',
+			},
+		],
+	},
 }

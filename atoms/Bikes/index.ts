@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { Bike } from '@api/Models/Bikes/types'
+import { Bike, ViewModel } from '@api/Models/Bikes/types'
 
 const prefix = `Bikes`
 export const BikesDataAtom = atom<Bike[]>({
@@ -37,6 +37,14 @@ export const BikeFiltersAtom = atom({
 export const BikeFilterLoadingAtom = atom({
 	key: `BikeFilterLoading`,
 	default: false,
+})
+
+export const ViewBikesAtom = atom<ViewModel>({
+	key: `${prefix}viewBikes`,
+	default: {
+		title: 'List',
+		val: 'list',
+	},
 })
 
 export const ColumnVisibilityDefaultState: Set<keyof Bike> = new Set()

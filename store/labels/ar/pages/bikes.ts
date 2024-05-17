@@ -48,4 +48,17 @@ export default {
 			clear: 'إلغاء',
 		},
 	},
+	view: {
+		label: 'العرض',
+		options: [
+			{
+				title: 'قائمة',
+				val: 'list',
+			},
+			{
+				title: 'جدول',
+				val: 'table',
+			},
+		],
+	},
 }
