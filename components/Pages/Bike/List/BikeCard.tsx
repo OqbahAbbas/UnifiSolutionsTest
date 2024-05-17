@@ -120,6 +120,7 @@ export const Info = styled.div`
 		display: flex;
 		flex-direction: row;
 		justify-content: spcae-between;
+		gap: 12px;
 
 		${({ theme }) => theme.adaptive.xs} {
 			flex-direction: column;

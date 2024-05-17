@@ -27,6 +27,7 @@ import queryParams from '@utils/basic/queryParameters'
 import TableController from '@components/Pages/Bike/Table/TableController'
 import { useRecoilValue } from 'recoil'
 import BikeCard from '@components/Pages/Bike/List/BikeCard'
+import BikeCardSkeleton from '@components/Skeletons/BikeCardSkeleton'
 
 const Page: NextPageWithProps = () => {
 	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
@@ -58,13 +59,21 @@ const Page: NextPageWithProps = () => {
 					{!filterLoading && !loading && <Table />}
 					<TableFooter />
 				</TableContainer>
-				{bikes.length > 0 && (
+				{bikes.length > 0 && !filterLoading && !loading && (
 					<div className="cardsContainer">
 						{bikes.map(bike => (
 							<BikeCard bike={bike} key={bike.id} />
 						))}
 					</div>
 				)}
+				{filterLoading ||
+					(loading && (
+						<div className="cardsContainer">
+							{[1, 2, 3, 4].map(item => (
+								<BikeCardSkeleton key={item} />
+							))}
+						</div>
+					))}
 			</Container>
 		</>
 	)
