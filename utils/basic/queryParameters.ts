@@ -1,15 +1,23 @@
+import fetchBikesParameters from '@constants/fetchBikesParameters'
+
 export interface QueryParams {
 	pageIndex: number
 	pageSize: number
-	search?: string
 	filter?: Record<string, string | string[]>
 }
 
 const queryParams = (params: QueryParams) => {
-	let query = `?MaxResultCount=${params.pageSize}&SkipCount=${params.pageIndex * params.pageSize}`
-	query = params.search ? `${query}&Keyword=${params.search}` : query
+	// get basic query parameters
+	const query = `?page=${params.pageIndex + 1}&per_page=${params.pageSize}`
+	// get constant query parameters
+	const constantQueryArray = Object.keys(fetchBikesParameters).map(key => {
+		const item = fetchBikesParameters[key as keyof typeof fetchBikesParameters]
+		return `&${key}=${item}`
+	})
+	const constantQuery = constantQueryArray.join('')
+	// get filter query parameters
 	const { filter } = params ?? {}
-	if (!filter || !Object.keys(filter).length) return query
+	if (!filter || !Object.keys(filter).length) return query + constantQuery
 	const filterQueryArray = Object.keys(filter).map(key => {
 		const item = filter[key]
 		if (Array.isArray(item)) {
@@ -19,7 +27,8 @@ const queryParams = (params: QueryParams) => {
 		return `&${key}=${item}`
 	})
 	const filterQuery = filterQueryArray.join('')
-	return query + filterQuery
+
+	return query + constantQuery + filterQuery
 }
 
 export default queryParams

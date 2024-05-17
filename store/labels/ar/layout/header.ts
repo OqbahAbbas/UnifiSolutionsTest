@@ -3,6 +3,7 @@ const header = {
 		ar: 'العربية',
 		en: 'English',
 	},
+	visitUs: 'توجه إلى موقعنا',
 }
 
 export default header

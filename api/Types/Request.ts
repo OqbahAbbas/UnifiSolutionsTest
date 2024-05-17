@@ -17,13 +17,7 @@ export interface GetInitialPropsContextWithSession extends NextPageContext {
 }
 
 export interface RequestProps<T> {
-	/**
-	 * Return non-cropped response
-	 */
-	returnBody?: boolean
-	formattedResponse?: boolean
-	form?: boolean
-	authorization?: boolean
+	filteredData?: boolean
 	method?: HTTPMethods
 	data?: T
 	locale?: string

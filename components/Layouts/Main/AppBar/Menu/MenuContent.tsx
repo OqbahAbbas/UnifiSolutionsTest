@@ -1,6 +1,7 @@
 import ContentGenerator from './Components/ContentGenerator'
 import { MenuContentItem } from './Components/types'
 import LanguageButton from './Components/LanguageButton'
+import VisitUs from './Components/VisitUs'
 
 const MenuContent = () => {
 	const LeftContent: MenuContentItem[] = []
@@ -8,6 +9,9 @@ const MenuContent = () => {
 	const RightContent: MenuContentItem[] = [
 		{
 			component: () => <LanguageButton />,
+		},
+		{
+			component: () => <VisitUs />,
 		},
 	]
 

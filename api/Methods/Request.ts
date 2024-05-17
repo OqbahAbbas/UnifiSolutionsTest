@@ -9,13 +9,7 @@ const request = async <T = SomeObject, P = SomeObject>(
 	path: string,
 	requestProps?: RequestProps<T>
 ) => {
-	const {
-		method = 'GET',
-		data,
-		formattedResponse = true,
-		returnBody = false,
-		locale,
-	} = requestProps ?? {}
+	const { method = 'GET', data, locale } = requestProps ?? {}
 
 	path = url(`${UNHID_HOSTNAME}${path}`)
 	const requestUrl = new URL(path)
@@ -58,7 +52,7 @@ const request = async <T = SomeObject, P = SomeObject>(
 
 		let responseSuccess = response.ok
 
-		if (formattedResponse && responseData.error) {
+		if (responseData.error) {
 			responseSuccess = false
 		}
 		if (!responseSuccess) {
@@ -68,17 +62,11 @@ const request = async <T = SomeObject, P = SomeObject>(
 				error: error as number,
 			}
 		}
-
-		if (formattedResponse && !returnBody) {
-			const { data: receivedData } = responseData
-			responseData = receivedData
-		}
 	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.error(err)
 		return { error: err }
 	}
-
 	return responseData as P
 }
 

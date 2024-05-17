@@ -1,5 +1,5 @@
 import global from './global'
-import dashboard from './pages/dashboard'
+import bikes from './pages/bikes'
 import header from './layout/header'
 import errors from './errors'
 import table from './table'
@@ -7,7 +7,7 @@ import table from './table'
 const labels = {
 	global,
 	pages: {
-		dashboard,
+		bikes,
 	},
 	layout: {
 		header,
