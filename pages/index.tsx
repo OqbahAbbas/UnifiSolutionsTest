@@ -26,10 +26,12 @@ import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 import queryParams from '@utils/basic/queryParameters'
 import TableController from '@components/Pages/Bike/Table/TableController'
 import { useRecoilValue } from 'recoil'
+import BikeCard from '@components/Pages/Bike/List/BikeCard'
 
 const Page: NextPageWithProps = () => {
 	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
 	const loading = useRecoilValue(LoadingAtom)
+	const bikes = useRecoilValue(BikesDataAtom)
 	const router = useRouter()
 	const { locale } = router ?? {}
 	return (
@@ -56,6 +58,13 @@ const Page: NextPageWithProps = () => {
 					{!filterLoading && !loading && <Table />}
 					<TableFooter />
 				</TableContainer>
+				{bikes.length > 0 && (
+					<div className="cardsContainer">
+						{bikes.map(bike => (
+							<BikeCard bike={bike} key={bike.id} />
+						))}
+					</div>
+				)}
 			</Container>
 		</>
 	)
@@ -71,7 +80,7 @@ const Container = styled(BaseContainer)`
 	gap: 32px;
 
 	${({ theme }) => theme.adaptive.md} {
-		padding: 32px 0;
+		padding: 32px 12px;
 	}
 `
 
