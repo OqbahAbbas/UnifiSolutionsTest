@@ -10,6 +10,7 @@ import ColumnSelector from '@components/Pages/Bike/Table/ColumnSelector'
 import Table from '@components/Pages/Bike/Table/Table'
 import { useRouter } from 'next/router'
 import { getCookie } from 'cookies-next'
+import TableSkeleton from '@components/Skeletons/TableSkeleton'
 import {
 	BikeFilterLoadingAtom,
 	BikeFiltersAtom,
@@ -17,14 +18,18 @@ import {
 	BikesDataAtom,
 	ColumnSelectorCookieName,
 	ColumnVisibilityAtom,
+	LoadingAtom,
 	PageIndexAtom,
 	PageSizeAtom,
 } from '@atoms/Bikes'
 import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 import queryParams from '@utils/basic/queryParameters'
 import TableController from '@components/Pages/Bike/Table/TableController'
+import { useRecoilValue } from 'recoil'
 
 const Page: NextPageWithProps = () => {
+	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
+	const loading = useRecoilValue(LoadingAtom)
 	const router = useRouter()
 	const { locale } = router ?? {}
 	return (
@@ -40,7 +45,15 @@ const Page: NextPageWithProps = () => {
 							<ColumnSelector />
 						</div>
 					</TableActions>
-					<Table />
+					{(filterLoading || loading) && (
+						<TableSkeleton
+							{...{
+								rows: 10,
+								columns: 5,
+							}}
+						/>
+					)}
+					{!filterLoading && !loading && <Table />}
 					<TableFooter />
 				</TableContainer>
 			</Container>
