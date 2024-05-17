@@ -1,11 +1,17 @@
 import request from '@api/Methods/Request'
-import { FilteredBikes } from './types'
+import { BikesCount, FilteredBikes } from './types'
 
-const get = () =>
-	request<null, FilteredBikes>('/search', {
+const get = (query?: string) =>
+	request<null, FilteredBikes>(`/search${query}`, {
+		filteredData: true,
+	})
+
+const count = (query?: string) =>
+	request<null, BikesCount>(`/search/count${query}`, {
 		filteredData: true,
 	})
 
 export default {
 	get,
+	count,
 }

@@ -4,13 +4,12 @@ import { getRouter } from 'helpers/RouterNexus'
 import { SomeObject } from '@admixltd/admix-component-library'
 import { UNHID_HOSTNAME } from '@constants/envs'
 import { RequestOptions, RequestProps } from '@api/Types/Request'
-import stringToNumber from '@utils/basic/stringToNumber'
 
 const request = async <T = SomeObject, P = SomeObject>(
 	path: string,
 	requestProps?: RequestProps<T>
 ) => {
-	const { method = 'GET', data, locale, filteredData } = requestProps ?? {}
+	const { method = 'GET', data, locale } = requestProps ?? {}
 
 	path = url(`${UNHID_HOSTNAME}${path}`)
 	const requestUrl = new URL(path)
@@ -45,14 +44,11 @@ const request = async <T = SomeObject, P = SomeObject>(
 	}
 
 	let responseData
-	let totalRecords
 
 	try {
 		const response = await fetch(requestUrl.toString(), options)
 
 		responseData = await response.json()
-		const { headers: responseHeaders } = response
-		totalRecords = stringToNumber(responseHeaders.get('total') ?? '0')
 
 		let responseSuccess = response.ok
 
@@ -71,7 +67,6 @@ const request = async <T = SomeObject, P = SomeObject>(
 		console.error(err)
 		return { error: err }
 	}
-	if (filteredData) return { data: responseData, total: totalRecords } as P
 	return responseData as P
 }
 

@@ -26,6 +26,11 @@ export interface ViewModel {
 }
 
 export interface FilteredBikes {
-	data: { bikes: Bike[] }
-	total: number
+	bikes: Bike[]
+}
+
+export interface BikesCount {
+	non: number
+	stolen: number
+	proximity: number
 }
