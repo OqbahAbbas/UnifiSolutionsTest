@@ -4,18 +4,32 @@ import BaseContainer from '@components/Layouts/Main/Container'
 import MainLayout from '@components/Layouts/Main'
 import initialPropsWrapper from '@helpers/initialPropsWrapper'
 import { NextPageWithProps } from '@interfaces/NextPage'
-import pages from '@constants/pages'
 import BikeService from '@api/Models/Bikes'
 import { SelectedBikeAtom } from '@atoms/Bikes'
 import Details from '@components/Pages/Details'
 import { useRecoilValue } from 'recoil'
+import getLabels from '@helpers/getLabels'
+import { BikeById } from '@api/Models/Bikes/types'
+import { useEffect } from 'react'
+import { Snackbar } from '@admixltd/admix-component-library/Snackbar'
 
-const Page: NextPageWithProps = () => {
+interface DetailsProps {
+	error: string
+	bike: BikeById
+}
+
+const Page: NextPageWithProps<DetailsProps> = ({ error }) => {
 	const bike = useRecoilValue(SelectedBikeAtom)
+
+	useEffect(() => {
+		if (error) {
+			Snackbar.error(error)
+		}
+	}, [])
 
 	return (
 		<>
-			<Meta title={bike.title} />
+			<Meta title={bike?.title} />
 			<Container>
 				<Details />
 			</Container>
@@ -40,34 +54,24 @@ const Container = styled(BaseContainer)`
 }`
 
 Page.getInitialProps = context =>
-	initialPropsWrapper(
+	initialPropsWrapper<DetailsProps>(
 		async ({ query }) => {
 			const id = parseInt(query.id as string, 10)
 
-			if (!id) {
-				return {
-					redirect: pages.dashboard.url,
-				}
-			}
-
 			const bikeResponse = await BikeService.getById(id)
-
-			if (bikeResponse && 'redirect' in bikeResponse) {
-				const { redirect } = bikeResponse
-				return {
-					redirect,
-				}
-			}
 
 			if (bikeResponse && 'bike' in bikeResponse) {
 				const { bike } = bikeResponse
 				return {
 					bike,
+					error: '',
 				}
 			}
-
 			return {
-				error: (bikeResponse as { error: unknown })?.error ?? 'error',
+				bike: {} as BikeById,
+				error:
+					(bikeResponse as { error: string })?.error ??
+					getLabels().errors.request.noRequest,
 			}
 		},
 		Page,
