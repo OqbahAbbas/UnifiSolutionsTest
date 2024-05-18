@@ -20,11 +20,7 @@ const queryParams = (params: QueryParams) => {
 	if (!filter || !Object.keys(filter).length) return query + constantQuery
 	const filterQueryArray = Object.keys(filter).map(key => {
 		const item = filter[key]
-		if (Array.isArray(item)) {
-			const arrayItemQueries = item.map((elem: string) => `&${key}=${elem}`)
-			return arrayItemQueries.join('')
-		}
-		return `&${key}=${item}`
+		return item ? `&${key}=${item}` : ''
 	})
 	const filterQuery = filterQueryArray.join('')
 

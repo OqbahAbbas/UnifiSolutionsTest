@@ -1,23 +1,23 @@
-### Namaa Solution Test - Movie Platform
+### Unifi Solution Test - Bike Theft Platform
 
-Namaa Solution Test is a versatile movie platform enabling users to locally store movie data using cookies. It offers comprehensive functionalities such as movie addition, editing, and deletion, supporting both list and table views. Users can conveniently filter and sort movies based on various criteria.
+Unifi Solution Test is a versatile bike theft platform enabling police officers in the area of Munich to monitor the bike theft cases and efficiently resolve them. It offers comprehensive functionalities such as  bike theft cases listing and filtering, supporting both list and table views. Users can conveniently filter the cases based on various criterias (Case title - Case distance from Munich - Case date **Which is supported in the Front end but not in the API**).
 
 ### Access the Published Application
 
-The Namaa Solution Test Movie Platform is live and accessible online! You can explore the application using the following link:
+The Unifi Solution Test Bike Theft Platform is live and accessible online! You can explore the application using the following link:
 
-[View Live Demo](https://namaa-solutions-movie-platform.vercel.app/en)
+[View Live Demo](https://unifi-solutions-test.vercel.app/en)
 
 #### Key Features:
-- **Movie Management:** Add, edit, or delete movies effortlessly.
-- **View Options:** Switch between list and table views for movies.
-- **Filtering and Sorting:** Easily filter and sort movies by different criteria.
+- **Bike Theft Management:** List bike theft cases effortlessly.
+- **View Options:** Switch between list and table views for bike theft cases.
+- **Filtering and Sorting:** Easily filter bike theft cases by different criteria.
 - **Language Support:** Available in both English and Arabic languages.
 - **Responsive Design:** Provides an optimal viewing experience across all screen sizes.
 
 ### Tech Specifications
 
-The Namaa Solution Test Movie Platform is built using the following technologies:
+The Unifi Solution Test Bike Theft Platform is built using the following technologies:
 
 - **Next.js Platform:** The solution is developed using Next.js, a React framework known for its server-side rendering and efficient performance.
 - **Material-UI:** Material-UI serves as the primary React component library, providing a consistent and customizable UI experience.

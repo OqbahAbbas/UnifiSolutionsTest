@@ -2,7 +2,7 @@ import { Labels } from '@labels'
 
 import { ColumnDefinition, TableActionMenu } from '@admixltd/admix-component-library/Table'
 import StyledMenu from '@components/Layouts/Main/StyledMenu/StyledMenu'
-import EditButton from './EditButton'
+import ViewDetails from './ViewDetails'
 
 export default (labels: Labels[keyof Labels]['pages']['bikes']['columns']) =>
 	({
@@ -15,9 +15,9 @@ export default (labels: Labels[keyof Labels]['pages']['bikes']['columns']) =>
 					<StyledMenu>
 						<div className="titleContainer">{labels.actions.menuTitle}</div>
 						<div className="menuGroup">
-							<EditButton id={id} closeMenu={closeMenu}>
-								{labels.actions.edit}
-							</EditButton>
+							<ViewDetails id={id} closeMenu={closeMenu}>
+								{labels.actions.details}
+							</ViewDetails>
 						</div>
 					</StyledMenu>
 				)}

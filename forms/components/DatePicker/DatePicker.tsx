@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { IField } from '@forms/generate/types/IField'
 import styled from '@emotion/styled'
 import classnames from 'classnames'
@@ -13,19 +13,37 @@ const DatePicker: FC<IField> = ({ field, index, handleChange, value, error }) =>
 	field = field as IDatePicker
 	const { placeholder, ...other } = field.props ?? {}
 	const { name = '' } = field
-	const [dateValue, setDateValue] = useState(value ?? '')
+	const [dateValue, setDateValue] = useState(value ?? other?.range ? [''] : '')
+
+	const getCalendarValue = (calendarVal: string | string[]) => {
+		if (Array.isArray(calendarVal)) {
+			const formattedDates = calendarVal.map(val => new DateObject(val))
+			return formattedDates
+		}
+		return new DateObject(calendarVal)
+	}
+
+	useEffect(() => {
+		if (!value) setDateValue(other?.range ? [''] : '')
+	}, [value])
+
 	return (
 		<DatePickerContainer className={classnames({ hasError: !!error })}>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
 				<Calendar
-					value={new DateObject(value as string)}
+					value={getCalendarValue(value as string | string[])}
 					name={name}
 					{...other}
 					key={`${name}_${index}`}
-					onChange={(date: DateObject) => {
-						handleChange(name, date.format())
-						setDateValue(date.format())
-						setAnchorEl(null)
+					onChange={(date: DateObject | DateObject[]) => {
+						if (Array.isArray(date)) {
+							const formattedDates = date.map(dateObj => dateObj.format())
+							handleChange(name, formattedDates)
+							setDateValue(formattedDates)
+						} else {
+							handleChange(name, date.format())
+							setDateValue(date.format())
+						}
 					}}
 				/>
 			</Menu>

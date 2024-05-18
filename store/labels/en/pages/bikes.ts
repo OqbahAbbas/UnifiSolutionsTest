@@ -20,7 +20,7 @@ export default {
 		image: 'Image',
 		actions: {
 			menuTitle: 'Actions',
-			edit: 'Edit',
+			details: 'View Details',
 		},
 	},
 	fields: {
@@ -35,17 +35,31 @@ export default {
 	filters: {
 		label: 'Filters',
 		fields: {
-			status: {
-				label: 'Status',
-				options: [
-					{ title: 'Active', value: true },
-					{ title: 'Not Active', value: false },
-				],
+			title: 'Title',
+			distance: {
+				label: 'Distance',
+				placeHolder: 'Miles around Munich',
 			},
+			date: 'Theft Date',
 		},
 		actions: {
-			Filter: 'Filter',
+			filter: 'Filter',
 			clear: 'Clear',
 		},
 	},
+	results: 'Stolen Bikes around Munich',
+	view: {
+		label: 'View',
+		options: [
+			{
+				title: 'List',
+				val: 'list',
+			},
+			{
+				title: 'Table',
+				val: 'table',
+			},
+		],
+	},
+	noFilterResults: `No data matches the filters you've chosen`,
 }
