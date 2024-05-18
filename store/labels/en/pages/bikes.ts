@@ -20,7 +20,7 @@ export default {
 		image: 'Image',
 		actions: {
 			menuTitle: 'Actions',
-			edit: 'Edit',
+			details: 'View Details',
 		},
 	},
 	fields: {
@@ -61,4 +61,5 @@ export default {
 			},
 		],
 	},
+	noFilterResults: `No data matches the filters you've chosen`,
 }

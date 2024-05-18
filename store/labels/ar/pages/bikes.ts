@@ -20,7 +20,7 @@ export default {
 		image: 'الصورة',
 		actions: {
 			menuTitle: 'العمليات',
-			edit: 'تعديل',
+			details: 'عرض التفاصيل',
 		},
 	},
 	fields: {
@@ -61,4 +61,5 @@ export default {
 			},
 		],
 	},
+	noFilterResults: 'لا يوجد نتائج بحث مطابقة',
 }

@@ -4,7 +4,7 @@ import { Button } from '@admixltd/admix-component-library'
 import { useRouter } from 'next/router'
 import { Bike } from '@api/Models/Bikes/types'
 
-const EditButton: FC<PropsWithChildren<{ id: Bike['id']; closeMenu: () => void }>> = ({
+const ViewDetails: FC<PropsWithChildren<{ id: Bike['id']; closeMenu: () => void }>> = ({
 	id,
 	children,
 	closeMenu,
@@ -26,7 +26,7 @@ const EditButton: FC<PropsWithChildren<{ id: Bike['id']; closeMenu: () => void }
 			onClick={() => {
 				if (loading) return
 				setLoading(true)
-				router.push(`${pages.dashboard}/${id}`)
+				router.push(`${pages.dashboard.url}/${id}`)
 			}}
 		>
 			{children}
@@ -34,4 +34,4 @@ const EditButton: FC<PropsWithChildren<{ id: Bike['id']; closeMenu: () => void }
 	)
 }
 
-export default EditButton
+export default ViewDetails

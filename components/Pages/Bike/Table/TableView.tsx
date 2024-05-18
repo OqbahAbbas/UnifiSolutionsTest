@@ -4,36 +4,47 @@ import ColumnSelector from '@components/Pages/Bike/Table/ColumnSelector'
 import Table from '@components/Pages/Bike/Table/Table'
 import { useRouter } from 'next/router'
 import TableSkeleton from '@components/Skeletons/TableSkeleton'
-import { BikeFilterLoadingAtom, LoadingAtom } from '@atoms/Bikes'
+import { BikeFilterLoadingAtom, BikesCountAtom, LoadingAtom } from '@atoms/Bikes'
 import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 import { useRecoilValue } from 'recoil'
+import NoData from '../NoData'
 
 const ListView = () => {
 	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
 	const loading = useRecoilValue(LoadingAtom)
+	const totalBikesCount = useRecoilValue(BikesCountAtom)
 	const router = useRouter()
 	const { locale } = router ?? {}
 
 	return (
-		<TableContainer locale={locale ?? 'en'}>
-			<TableActions>
-				<div />
-				<div>
-					<div />
-					<ColumnSelector />
-				</div>
-			</TableActions>
-			{(filterLoading || loading) && (
-				<TableSkeleton
-					{...{
-						rows: 10,
-						columns: 5,
-					}}
-				/>
+		<>
+			{(totalBikesCount > 0 || filterLoading || loading) && (
+				<TableContainer locale={locale ?? 'en'}>
+					<TableActions>
+						<div />
+						<div>
+							<div />
+							<ColumnSelector />
+						</div>
+					</TableActions>
+					{(filterLoading || loading) && (
+						<TableSkeleton
+							{...{
+								rows: 10,
+								columns: 5,
+							}}
+						/>
+					)}
+					{!filterLoading && !loading && (
+						<>
+							<Table />
+							<TableFooter />
+						</>
+					)}
+				</TableContainer>
 			)}
-			{!filterLoading && !loading && <Table />}
-			<TableFooter />
-		</TableContainer>
+			{!filterLoading && !loading && totalBikesCount <= 0 && <NoData />}
+		</>
 	)
 }
 

@@ -27,7 +27,6 @@ import BikesView from '@components/Pages/Bike/BikesView'
 import { useEffect } from 'react'
 import { ViewModel } from '@api/Models/Bikes/types'
 import TableController from '@components/Pages/Bike/Table/TableController'
-import TableFooter from '@components/Pages/Bike/Table/TableFooter'
 import Filters from '@components/Pages/Bike/Filters'
 import { Skeleton } from '@mui/material'
 import { FormFieldDataUpdater, FormFieldErrorsDataUpdater } from '@forms/index'
@@ -62,12 +61,7 @@ const Page: NextPageWithProps = () => {
 				</div>
 				<TableController />
 				{view.val === 'table' && <TableView />}
-				{view.val === 'list' && (
-					<>
-						<ListView />
-						<TableFooter />
-					</>
-				)}
+				{view.val === 'list' && <ListView />}
 			</Container>
 		</>
 	)
@@ -168,7 +162,10 @@ Page.getInitialProps = context =>
 			}
 
 			return {
-				error: 'Error',
+				error:
+					(bikesResponse as { error: unknown })?.error ??
+					(bikesCountResponse as { error: unknown })?.error ??
+					'error',
 			}
 		},
 		Page,
