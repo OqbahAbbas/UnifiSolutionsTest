@@ -35,19 +35,19 @@ export default {
 	filters: {
 		label: 'المرشحات',
 		fields: {
-			status: {
-				label: 'الحالة',
-				options: [
-					{ title: 'فعال', value: true },
-					{ title: 'غير فعال', value: false },
-				],
+			title: 'العنوان',
+			distance: {
+				label: 'المسافة',
+				placeHolder: 'عدد الأميال حول ميونخ',
 			},
+			date: 'تاريخ السرقة',
 		},
 		actions: {
-			Filter: 'ترشيح',
+			filter: 'تطبيق',
 			clear: 'إلغاء',
 		},
 	},
+	results: 'الدراجات المسروقة حول ميونخ',
 	view: {
 		label: 'العرض',
 		options: [

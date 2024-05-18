@@ -13,6 +13,7 @@ import {
 	BikesDataAtom,
 	ColumnSelectorCookieName,
 	ColumnVisibilityAtom,
+	LoadingAtom,
 	PageIndexAtom,
 	PageSizeAtom,
 	ViewBikesAtom,
@@ -27,11 +28,17 @@ import { useEffect } from 'react'
 import { ViewModel } from '@api/Models/Bikes/types'
 import TableController from '@components/Pages/Bike/Table/TableController'
 import TableFooter from '@components/Pages/Bike/Table/TableFooter'
+import Filters from '@components/Pages/Bike/Filters'
+import { Skeleton } from '@mui/material'
+import { FormFieldDataUpdater, FormFieldErrorsDataUpdater } from '@forms/index'
 
 const Page: NextPageWithProps = () => {
+	const { results } = useRecoilValue(LabelsAtom).pages.bikes
 	const [view, setView] = useRecoilState(ViewBikesAtom)
 	const { view: viewLabels } = useRecoilValue(LabelsAtom).pages.bikes
-	const bikes = useRecoilValue(BikesDataAtom)
+	const totalBikesCount = useRecoilValue(BikesCountAtom)
+	const filterLoading = useRecoilValue(BikeFilterLoadingAtom)
+	const loading = useRecoilValue(LoadingAtom)
 
 	useEffect(() => {
 		const viewVal = viewLabels.options.find(option => option.val === view.val)
@@ -42,10 +49,12 @@ const Page: NextPageWithProps = () => {
 		<>
 			<Meta />
 			<Container>
+				<Filters />
 				<div className="header">
 					<div className="results">
-						<h1>results</h1>
-						<span>{`(${bikes.length})`}</span>
+						<h1>{results}</h1>
+						{!filterLoading && !loading && <span>{`(${totalBikesCount})`}</span>}
+						{(filterLoading || loading) && <Skeleton variant="text" width={50} />}
 					</div>
 					<div className="actions">
 						<BikesView />
@@ -78,13 +87,12 @@ const Container = styled(BaseContainer)`
 	}
 
 	.header {
-		display: grid;
-		grid-auto-flow: column;
+		display: flex;
+		flex-direction: row;
 		justify-content: space-between;
-		align-items: center;
 
 		${({ theme }) => theme.adaptive.md} {
-			grid-auto-flow: row;
+			flex-direction: column;
 			gap: 24px;
 			justify-content: start;
 			padding: 0 24px;
@@ -180,5 +188,7 @@ Page.recoilSetter = (
 	set(ColumnVisibilityAtom, new Set(JSON.parse(hiddenColumns)))
 	reset(BikeFiltersAtom)
 	reset(BikeFilterLoadingAtom)
+	reset(FormFieldDataUpdater)
+	reset(FormFieldErrorsDataUpdater)
 }
 export default Page

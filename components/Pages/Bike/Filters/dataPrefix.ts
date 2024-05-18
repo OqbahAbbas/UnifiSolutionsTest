@@ -1,0 +1,1 @@
+export default 'BikesFilters__'

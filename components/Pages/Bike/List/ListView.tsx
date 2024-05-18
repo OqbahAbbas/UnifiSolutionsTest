@@ -17,14 +17,13 @@ const ListView = () => {
 					))}
 				</div>
 			)}
-			{filterLoading ||
-				(loading && (
-					<div className="cardsContainer">
-						{[1, 2, 3, 4].map(item => (
-							<BikeCardSkeleton key={item} />
-						))}
-					</div>
-				))}
+			{(filterLoading || loading) && (
+				<div className="cardsContainer">
+					{[1, 2, 3, 4].map(item => (
+						<BikeCardSkeleton key={item} />
+					))}
+				</div>
+			)}
 		</>
 	)
 }
