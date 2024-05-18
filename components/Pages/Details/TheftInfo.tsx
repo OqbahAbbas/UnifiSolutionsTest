@@ -30,13 +30,13 @@ const TheftInfo = () => {
 		frame_model: bikeModel,
 		year: manufacturingYear,
 		description: bikeDescription,
-	} = bike
+	} = bike ?? {}
 
 	const {
 		police_report_department: policeReportDepartment,
 		created_at: policeReportDate,
 		theft_description: incidenceDescription,
-	} = stealRecord
+	} = stealRecord ?? {}
 
 	return (
 		<Container>
@@ -60,32 +60,32 @@ const TheftInfo = () => {
 				</div>
 				<div className="detailsSection">
 					<span className="label">{serial}: </span>
-					<span className="value">{serialNumber}</span>
+					<span className="value">{serialNumber ?? '-'}</span>
 				</div>
 				<div className="detailsSection">
 					<span className="label">{manufacturer}: </span>
-					<span className="value">{manufacturerName}</span>
+					<span className="value">{manufacturerName ?? '-'}</span>
 				</div>
 				<div className="detailsSection">
 					<span className="label">{name}: </span>
-					<span className="value">{bikeName}</span>
+					<span className="value">{bikeName ?? '-'}</span>
 				</div>
 				<div className="detailsSection">
 					<span className="label">{model}: </span>
-					<span className="value">{bikeModel}</span>
+					<span className="value">{bikeModel ?? '-'}</span>
 				</div>
 				<div className="detailsSection">
 					<span className="label">{year}: </span>
-					<span className="value">{manufacturingYear}</span>
+					<span className="value">{manufacturingYear ?? '-'}</span>
 				</div>
 			</div>
 			<div className="detailsSection">
 				<span className="label">{description}: </span>
-				<span className="value">{bikeDescription}</span>
+				<span className="value">{bikeDescription ?? '-'}</span>
 			</div>
 			<div className="detailsSection">
 				<span className="label">{theftDescription}: </span>
-				<span className="value">{incidenceDescription}</span>
+				<span className="value">{incidenceDescription ?? '-'}</span>
 			</div>
 		</Container>
 	)

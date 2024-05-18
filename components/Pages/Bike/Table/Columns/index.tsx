@@ -27,6 +27,7 @@ const Columns: (
 				headerName: labels.theftDate,
 				width: 175,
 				valueFormatter: ({ value }) => UTCtoLocal(value),
+				sortable: false,
 			},
 			Actions(labels),
 		] as BikeColumnDefinition[]

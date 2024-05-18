@@ -61,5 +61,5 @@ export default {
 			},
 		],
 	},
-	noFilterResults: 'لا يوجد نتائج بحث مطابقة',
+	noFilterResults: 'لا يوجد معطيات للعرض',
 }

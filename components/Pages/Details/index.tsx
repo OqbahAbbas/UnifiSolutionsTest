@@ -6,7 +6,7 @@ import TheftInfo from './TheftInfo'
 
 const BikeDetails = () => {
 	const bike = useRecoilValue(SelectedBikeAtom)
-	const { title, large_img: largeImage, thumb } = bike
+	const { title, large_img: largeImage, thumb } = bike ?? {}
 	return (
 		<Container>
 			<img src={largeImage ?? thumb ?? BikeIcon} alt={title} />

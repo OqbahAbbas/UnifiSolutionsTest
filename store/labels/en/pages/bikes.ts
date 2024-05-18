@@ -61,5 +61,5 @@ export default {
 			},
 		],
 	},
-	noFilterResults: `No data matches the filters you've chosen`,
+	noFilterResults: `No data available to show`,
 }

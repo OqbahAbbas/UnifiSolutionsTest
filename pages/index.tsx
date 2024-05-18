@@ -25,13 +25,24 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import LabelsAtom from '@atoms/Labels'
 import BikesView from '@components/Pages/Bike/BikesView'
 import { useEffect } from 'react'
-import { ViewModel } from '@api/Models/Bikes/types'
+import { Bike, ViewModel } from '@api/Models/Bikes/types'
 import TableController from '@components/Pages/Bike/Table/TableController'
 import Filters from '@components/Pages/Bike/Filters'
 import { Skeleton } from '@mui/material'
 import { FormFieldDataUpdater, FormFieldErrorsDataUpdater } from '@forms/index'
+import getLabels from '@helpers/getLabels'
+import { Snackbar } from '@admixltd/admix-component-library/Snackbar'
 
-const Page: NextPageWithProps = () => {
+interface BikeListProps {
+	defaultPageSize: number
+	defaultPageIndex: number
+	hiddenColumns: string
+	bikes: Bike[]
+	bikesCount: number
+	error: string
+}
+
+const Page: NextPageWithProps<BikeListProps> = ({ error }) => {
 	const { results } = useRecoilValue(LabelsAtom).pages.bikes
 	const [view, setView] = useRecoilState(ViewBikesAtom)
 	const { view: viewLabels } = useRecoilValue(LabelsAtom).pages.bikes
@@ -42,6 +53,12 @@ const Page: NextPageWithProps = () => {
 	useEffect(() => {
 		const viewVal = viewLabels.options.find(option => option.val === view.val)
 		setView(viewVal as ViewModel)
+	}, [])
+
+	useEffect(() => {
+		if (error) {
+			Snackbar.error(error)
+		}
 	}, [])
 
 	return (
@@ -122,28 +139,14 @@ export const Wrapper = styled.div`
 `
 
 Page.getInitialProps = context =>
-	initialPropsWrapper(
+	initialPropsWrapper<BikeListProps>(
 		async ({ req }) => {
 			const defaultPageSize = 10
 			const defaultPageIndex = 0
 			const hiddenColumns = `${getCookie(ColumnSelectorCookieName, { req }) ?? '[]'}`
 			const query = queryParams({ pageIndex: defaultPageIndex, pageSize: defaultPageSize })
-			const bikesResponse = await BikesService.get(query)
 			const bikesCountResponse = await BikesService.count(query)
-
-			if (bikesResponse && 'redirect' in bikesResponse) {
-				const { redirect } = bikesResponse
-				return {
-					redirect,
-				}
-			}
-
-			if (bikesCountResponse && 'redirect' in bikesCountResponse) {
-				const { redirect } = bikesCountResponse
-				return {
-					redirect,
-				}
-			}
+			const bikesResponse = await BikesService.get(query)
 
 			if (
 				bikesResponse &&
@@ -152,20 +155,27 @@ Page.getInitialProps = context =>
 				'stolen' in bikesCountResponse
 			) {
 				const { bikes } = bikesResponse
+				const { proximity } = bikesCountResponse
 				return {
 					defaultPageSize,
 					defaultPageIndex,
 					hiddenColumns,
 					bikes,
-					bikesCount: bikesCountResponse,
+					bikesCount: proximity ?? 0,
+					error: '',
 				}
 			}
 
 			return {
+				defaultPageSize,
+				defaultPageIndex,
+				hiddenColumns,
+				bikes: [],
+				bikesCount: 0,
 				error:
-					(bikesResponse as { error: unknown })?.error ??
-					(bikesCountResponse as { error: unknown })?.error ??
-					'error',
+					(bikesResponse as { error: string })?.error ??
+					(bikesCountResponse as { error: string })?.error ??
+					getLabels().errors.request.noRequest,
 			}
 		},
 		Page,
@@ -179,7 +189,7 @@ Page.recoilSetter = (
 	{ bikes, bikesCount, defaultPageIndex, defaultPageSize, hiddenColumns = '[]' }
 ) => {
 	set(BikesDataAtom, bikes)
-	set(BikesCountAtom, bikesCount?.proximity ?? 0)
+	set(BikesCountAtom, bikesCount)
 	set(PageSizeAtom, defaultPageSize)
 	set(PageIndexAtom, defaultPageIndex)
 	set(ColumnVisibilityAtom, new Set(JSON.parse(hiddenColumns)))
